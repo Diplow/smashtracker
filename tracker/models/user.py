@@ -1,20 +1,32 @@
 from django.db import models
 
 
-class Job(models.Model):
-    name = models.CharField(max_length=30)
-    level = models.CharField(max_length=1, choices=(('0', 'trainee'), ('1', 'junior'), ('2', 'senior'), ('3', 'lead'), ('4', 'executive'),))
-    division = models.CharField(max_length=1, choices=(('1', 'r&d'), ('2', 'consulting'), ('3', 'creative'), ('4', 'other'),))
+class Group(models.Model):
+    name = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
-        return self.get_level_display() + " " + self.name 
+        return self.name
+
+    def to_dct(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
 
 class User(models.Model):
-    firstname = models.CharField(max_length=20)
-    lastname = models.CharField(max_length=30)
-    gender = models.CharField(max_length=1, choices=(('1', 'male'), ('2', 'female'), ('3', 'unknown'),))
-    birthday = models.DateField()
-    job = models.ForeignKey(Job, related_name="users")
+    nickname = models.CharField(max_length=30)
+    group = models.ForeignKey(Group, related_name="users")
+    description = models.TextField(default="")
 
     def __str__(self):
-        return self.firstname + " " + self.lastname
+        return "{nickname} ({group})".format(nickname=self.nickname, group=self.group.name)
+
+    def to_dct(self):
+        res = {}
+        res["id"] = self.id
+        res["group"] = self.group.to_dct()
+        res["nickname"] = self.nickname
+        res["description"] = self.description
+        res["prizes"] = {p.id: p.to_dct() for p in self.prizes}
+        res["showings"] = [s.to_dct() for s in self.showings.all()]
+        return res
