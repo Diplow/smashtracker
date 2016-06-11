@@ -16,7 +16,7 @@ class Group(models.Model):
 class User(models.Model):
     nickname = models.CharField(max_length=30)
     group = models.ForeignKey(Group, related_name="users")
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return "{nickname} ({group})".format(nickname=self.nickname, group=self.group.name)

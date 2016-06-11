@@ -1,0 +1,7 @@
+[ 
+  { 
+    "fields" : { "name" : "Artefact" },
+    "model" : "tracker.group",
+    "pk" : 1
+  }
+]

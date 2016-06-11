@@ -4,7 +4,7 @@ from tracker.models.user import User
 
 class Character(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -19,7 +19,7 @@ class Character(models.Model):
 
 class Map(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -36,7 +36,7 @@ class Tournament(models.Model):
     name = models.CharField(max_length=100, unique=True)
     ruling = models.CharField(max_length=1, choices=(('1', 'league'), ('2', 'single_elimination'), ('3', 'double_elimination'), ('4', 'other'),))
     registration = models.CharField(max_length=1, choices=(('1', 'open'), ('2', 'qualification'),))
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -56,7 +56,7 @@ class Game(models.Model):
     date = models.DateField()
     stage = models.ForeignKey(Map, related_name="games")
     tournament = models.ForeignKey(Tournament, related_name="games", null=True)
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return "{s} {i} ({d})".format(i=str(self.id), s=str(self.stage), d=str(self.date))
@@ -82,7 +82,7 @@ class Showing(models.Model):
     character = models.ForeignKey(Character, related_name="showings")
     game = models.ForeignKey(Game, related_name="showings")
     win = models.BooleanField()
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return "{w} by {u} on {g}".format(w="Win" if self.win else "Loss", u=str(self.user), g=str(self.game))
@@ -102,7 +102,7 @@ class TournamentResult(models.Model):
     position = models.IntegerField()
     tournament = models.ForeignKey(Tournament, related_name="results")
     user = models.ForeignKey(User, related_name="tournament_results")
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return "top{p} finish in {t} by {u}".format(p=str(self.position), t=str(self.tournament), u=str(self.user))
@@ -124,7 +124,7 @@ class Prize(models.Model):
     owner = models.ForeignKey(User, related_name="prizes")
     achievement = models.ForeignKey(TournamentResult, related_name="prizes")
     tournament = models.ForeignKey(Tournament, related_name="prizes")
-    description = models.TextField(default="")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name + " for " + str(self.tournament)
