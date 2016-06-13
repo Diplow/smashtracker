@@ -4,7 +4,7 @@
 
 ST enables you to easily track Super Smash Bros results among people of your company.
 
-ST focuses on storing and formating games and users data for effecient processing from data visualization tools like Artefact's Inisghts.
+ST focuses on storing and formating games and users data for efficient processing from data visualization tools like Artefact's Inisghts.
 
 
 ## Setup
